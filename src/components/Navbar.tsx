@@ -1,12 +1,9 @@
 import React from "react";
 import { navLinks } from "../data/content";
 import { useActiveSection } from "../hooks/useActiveSection";
+import { scrollToSection } from "../utils/scroll";
 
 const sectionIds = navLinks.map((l) => l.href);
-
-const scrollToSection = (id: string) => {
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-};
 
 const Navbar: React.FC = () => {
   const active = useActiveSection(sectionIds);

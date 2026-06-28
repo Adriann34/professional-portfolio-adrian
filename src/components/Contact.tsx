@@ -9,6 +9,107 @@ const SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID as string;
 const TEMPLATE_ID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID as string;
 const PUBLIC_KEY = process.env.REACT_APP_EMAILJS_PUBLIC_KEY as string;
 
+// Each entry renders one row in the contact-info list. `href` is omitted
+// for non-link rows (e.g. Location), which renders as plain text instead.
+const CONTACT_ITEMS: {
+  label: string;
+  value: string;
+  href?: string;
+  external?: boolean;
+  icon: React.ReactNode;
+}[] = [
+  {
+    label: "Phone",
+    value: contactInfo.phone,
+    href: `tel:${contactInfo.phone}`,
+    icon: (
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.83a16 16 0 0 0 6.26 6.26l1-1.06a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+    ),
+  },
+  {
+    label: "Email",
+    value: contactInfo.email,
+    href: `mailto:${contactInfo.email}`,
+    icon: (
+      <>
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+        <polyline points="22,6 12,13 2,6" />
+      </>
+    ),
+  },
+  {
+    label: "Location",
+    value: contactInfo.location,
+    icon: (
+      <>
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+        <circle cx="12" cy="10" r="3" />
+      </>
+    ),
+  },
+  {
+    label: "LinkedIn",
+    value: contactInfo.linkedinHandle,
+    href: contactInfo.linkedinUrl,
+    external: true,
+    icon: (
+      <>
+        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+        <rect x="2" y="9" width="4" height="12" />
+        <circle cx="4" cy="4" r="2" />
+      </>
+    ),
+  },
+];
+
+const ContactIcon: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <div className="contact-icon-wrap">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#5b7fff"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {children}
+    </svg>
+  </div>
+);
+
+const ContactItem: React.FC<(typeof CONTACT_ITEMS)[number]> = ({
+  label,
+  value,
+  href,
+  external,
+  icon,
+}) => {
+  const body = (
+    <>
+      <ContactIcon>{icon}</ContactIcon>
+      <div>
+        <div className="contact-item-label">{label}</div>
+        <div className="contact-item-val">{value}</div>
+      </div>
+    </>
+  );
+
+  if (!href) {
+    return <div className="contact-item">{body}</div>;
+  }
+
+  return (
+    <a
+      className="contact-item"
+      href={href}
+      target={external ? "_blank" : undefined}
+      rel={external ? "noreferrer" : undefined}
+    >
+      {body}
+    </a>
+  );
+};
+
 const Contact: React.FC = () => {
   const titleRef = useFadeIn<HTMLDivElement>();
   const infoRef = useFadeIn<HTMLDivElement>();
@@ -66,92 +167,9 @@ const Contact: React.FC = () => {
         </div>
         <div className="contact-grid">
           <div className="contact-info fade-in" ref={infoRef}>
-            <a className="contact-item" href={`tel:${contactInfo.phone}`}>
-              <div className="contact-icon-wrap">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#5b7fff"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.83a16 16 0 0 0 6.26 6.26l1-1.06a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
-                </svg>
-              </div>
-              <div>
-                <div className="contact-item-label">Phone</div>
-                <div className="contact-item-val">{contactInfo.phone}</div>
-              </div>
-            </a>
-
-            <a className="contact-item" href={`mailto:${contactInfo.email}`}>
-              <div className="contact-icon-wrap">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#5b7fff"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                  <polyline points="22,6 12,13 2,6" />
-                </svg>
-              </div>
-              <div>
-                <div className="contact-item-label">Email</div>
-                <div className="contact-item-val">{contactInfo.email}</div>
-              </div>
-            </a>
-
-            <div className="contact-item">
-              <div className="contact-icon-wrap">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#5b7fff"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                  <circle cx="12" cy="10" r="3" />
-                </svg>
-              </div>
-              <div>
-                <div className="contact-item-label">Location</div>
-                <div className="contact-item-val">{contactInfo.location}</div>
-              </div>
-            </div>
-
-            <a
-              className="contact-item"
-              href={contactInfo.linkedinUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <div className="contact-icon-wrap">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#5b7fff"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                  <rect x="2" y="9" width="4" height="12" />
-                  <circle cx="4" cy="4" r="2" />
-                </svg>
-              </div>
-              <div>
-                <div className="contact-item-label">LinkedIn</div>
-                <div className="contact-item-val">
-                  {contactInfo.linkedinHandle}
-                </div>
-              </div>
-            </a>
+            {CONTACT_ITEMS.map((item) => (
+              <ContactItem key={item.label} {...item} />
+            ))}
           </div>
 
           <div

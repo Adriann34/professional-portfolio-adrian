@@ -400,8 +400,8 @@ main {
   border-radius: var(--r-xl);
   padding: 28px 24px;
   transition: border-color 0.25s, transform 0.25s;
-   display: flex;            /* add */
-  flex-direction: column;   /* add */
+  display: flex;
+  flex-direction: column;
 }
 .skill-card:hover {
   border-color: var(--border2);

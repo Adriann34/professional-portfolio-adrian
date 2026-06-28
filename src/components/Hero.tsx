@@ -1,5 +1,37 @@
 import React, { useState } from "react";
 import { useFadeIn } from "../hooks/useFadeIn";
+import { scrollToSection } from "../utils/scroll";
+
+// Chip color is one of three accent palettes; rgba values mirror the CSS
+// custom properties (--accent1/2/3) so chips stay visually grouped by layer.
+type ChipAccent = "accent1" | "accent2" | "accent3";
+
+const CHIP_STYLES: Record<ChipAccent, React.CSSProperties> = {
+  accent1: {
+    background: "rgba(91,127,255,0.12)",
+    color: "var(--accent1)",
+    border: "1px solid rgba(91,127,255,0.2)",
+  },
+  accent2: {
+    background: "rgba(162,89,255,0.12)",
+    color: "var(--accent2)",
+    border: "1px solid rgba(162,89,255,0.2)",
+  },
+  accent3: {
+    background: "rgba(0,212,170,0.1)",
+    color: "var(--accent3)",
+    border: "1px solid rgba(0,212,170,0.2)",
+  },
+};
+
+const STACK_CHIPS: { label: string; accent: ChipAccent }[] = [
+  { label: "React", accent: "accent1" },
+  { label: "TypeScript", accent: "accent1" },
+  { label: "Tailwind", accent: "accent2" },
+  { label: "PHP", accent: "accent2" },
+  { label: "Firebase", accent: "accent3" },
+  { label: "Node.js", accent: "accent3" },
+];
 
 const Hero: React.FC = () => {
   const leftRef = useFadeIn<HTMLDivElement>();
@@ -33,9 +65,7 @@ const Hero: React.FC = () => {
                 className="btn-grad"
                 onClick={(e) => {
                   e.preventDefault();
-                  document
-                    .getElementById("projects")
-                    ?.scrollIntoView({ behavior: "smooth" });
+                  scrollToSection("projects");
                 }}
               >
                 <svg
@@ -59,9 +89,7 @@ const Hero: React.FC = () => {
                 className="btn-ghost"
                 onClick={(e) => {
                   e.preventDefault();
-                  document
-                    .getElementById("contact")
-                    ?.scrollIntoView({ behavior: "smooth" });
+                  scrollToSection("contact");
                 }}
               >
                 <svg
@@ -127,66 +155,15 @@ const Hero: React.FC = () => {
                     marginTop: 10,
                   }}
                 >
-                  <span
-                    className="stack-chip"
-                    style={{
-                      background: "rgba(91,127,255,0.12)",
-                      color: "var(--accent1)",
-                      border: "1px solid rgba(91,127,255,0.2)",
-                    }}
-                  >
-                    React
-                  </span>
-                  <span
-                    className="stack-chip"
-                    style={{
-                      background: "rgba(91,127,255,0.12)",
-                      color: "var(--accent1)",
-                      border: "1px solid rgba(91,127,255,0.2)",
-                    }}
-                  >
-                    TypeScript
-                  </span>
-                  <span
-                    className="stack-chip"
-                    style={{
-                      background: "rgba(162,89,255,0.12)",
-                      color: "var(--accent2)",
-                      border: "1px solid rgba(162,89,255,0.2)",
-                    }}
-                  >
-                    Tailwind
-                  </span>
-                                    <span
-                    className="stack-chip"
-                    style={{
-                      background: "rgba(162,89,255,0.12)",
-                      color: "var(--accent2)",
-                      border: "1px solid rgba(162,89,255,0.2)",
-                    }}
-                  >
-                    PHP
-                  </span>
-                  <span
-                    className="stack-chip"
-                    style={{
-                      background: "rgba(0,212,170,0.1)",
-                      color: "var(--accent3)",
-                      border: "1px solid rgba(0,212,170,0.2)",
-                    }}
-                  >
-                    Firebase
-                  </span>
-                  <span
-                    className="stack-chip"
-                    style={{
-                      background: "rgba(0,212,170,0.1)",
-                      color: "var(--accent3)",
-                      border: "1px solid rgba(0,212,170,0.2)",
-                    }}
-                  >
-                    Node.js
-                  </span>
+                  {STACK_CHIPS.map((chip) => (
+                    <span
+                      key={chip.label}
+                      className="stack-chip"
+                      style={CHIP_STYLES[chip.accent]}
+                    >
+                      {chip.label}
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>
