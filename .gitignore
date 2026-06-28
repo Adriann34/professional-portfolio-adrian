@@ -10,6 +10,12 @@ firebase-debug.log
 firebase-debug.*.log
 .firebaserc
 
+# editor / IDE
+.vscode/
+.idea/
+.history/
+*.swp
+
 # misc
 .DS_Store
 .env
