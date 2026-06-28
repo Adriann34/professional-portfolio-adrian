@@ -2,27 +2,9 @@ import React, { useState } from "react";
 import { useFadeIn } from "../hooks/useFadeIn";
 import { scrollToSection } from "../utils/scroll";
 
-// Chip color is one of three accent palettes; rgba values mirror the CSS
-// custom properties (--accent1/2/3) so chips stay visually grouped by layer.
+// Chip color is one of three accent palettes; class names map to the
+// .chip-accent1/2/3 rules in index.css so chips stay visually grouped by layer.
 type ChipAccent = "accent1" | "accent2" | "accent3";
-
-const CHIP_STYLES: Record<ChipAccent, React.CSSProperties> = {
-  accent1: {
-    background: "rgba(91,127,255,0.12)",
-    color: "var(--accent1)",
-    border: "1px solid rgba(91,127,255,0.2)",
-  },
-  accent2: {
-    background: "rgba(162,89,255,0.12)",
-    color: "var(--accent2)",
-    border: "1px solid rgba(162,89,255,0.2)",
-  },
-  accent3: {
-    background: "rgba(0,212,170,0.1)",
-    color: "var(--accent3)",
-    border: "1px solid rgba(0,212,170,0.2)",
-  },
-};
 
 const STACK_CHIPS: { label: string; accent: ChipAccent }[] = [
   { label: "React", accent: "accent1" },
@@ -30,7 +12,6 @@ const STACK_CHIPS: { label: string; accent: ChipAccent }[] = [
   { label: "Tailwind", accent: "accent2" },
   { label: "PHP", accent: "accent2" },
   { label: "Firebase", accent: "accent3" },
-  { label: "Node.js", accent: "accent3" },
 ];
 
 const Hero: React.FC = () => {
@@ -112,7 +93,7 @@ const Hero: React.FC = () => {
           {/* Dashboard-style side panels */}
           <div
             className="hero-right fade-in"
-            style={{ transitionDelay: "0.15s" }}
+            style={{ "--delay": "0.15s" } as React.CSSProperties}
             ref={rightRef}
           >
             <div className="profile-card">
@@ -147,19 +128,11 @@ const Hero: React.FC = () => {
               </div>
               <div className="hcard hcard-wide">
                 <div className="hcard-label">Primary stack</div>
-                <div
-                  style={{
-                    display: "flex",
-                    gap: 8,
-                    flexWrap: "wrap",
-                    marginTop: 10,
-                  }}
-                >
+                <div className="stack-chip-row">
                   {STACK_CHIPS.map((chip) => (
                     <span
                       key={chip.label}
-                      className="stack-chip"
-                      style={CHIP_STYLES[chip.accent]}
+                      className={`stack-chip chip-${chip.accent}`}
                     >
                       {chip.label}
                     </span>

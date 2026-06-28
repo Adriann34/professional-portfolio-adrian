@@ -48,6 +48,15 @@ const CONTACT_ITEMS: {
     ),
   },
   {
+    label: "GitHub",
+    value: contactInfo.githubHandle,
+    href: contactInfo.githubUrl,
+    external: true,
+    icon: (
+      <path d="M12 2a10 10 0 0 0-3.16 19.5c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.58 9.58 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .26.18.58.69.48A10 10 0 0 0 12 2z" />
+    ),
+  },
+  {
     label: "LinkedIn",
     value: contactInfo.linkedinHandle,
     href: contactInfo.linkedinUrl,
@@ -57,6 +66,18 @@ const CONTACT_ITEMS: {
         <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
         <rect x="2" y="9" width="4" height="12" />
         <circle cx="4" cy="4" r="2" />
+      </>
+    ),
+  },
+  {
+    label: "OnlineJobs.ph",
+    value: contactInfo.onlineJobsHandle,
+    href: contactInfo.onlineJobsUrl,
+    external: true,
+    icon: (
+      <>
+        <rect x="2" y="7" width="20" height="14" rx="2" />
+        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
       </>
     ),
   },
@@ -77,6 +98,24 @@ const ContactIcon: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   </div>
 );
 
+const ExternalLinkGlyph: React.FC = () => (
+  <svg
+    className="contact-item-external"
+    width="13"
+    height="13"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+    <polyline points="15 3 21 3 21 9" />
+    <line x1="10" y1="14" x2="21" y2="3" />
+  </svg>
+);
+
 const ContactItem: React.FC<(typeof CONTACT_ITEMS)[number]> = ({
   label,
   value,
@@ -87,10 +126,11 @@ const ContactItem: React.FC<(typeof CONTACT_ITEMS)[number]> = ({
   const body = (
     <>
       <ContactIcon>{icon}</ContactIcon>
-      <div>
+      <div className="contact-item-text">
         <div className="contact-item-label">{label}</div>
         <div className="contact-item-val">{value}</div>
       </div>
+      {external && <ExternalLinkGlyph />}
     </>
   );
 
@@ -174,7 +214,7 @@ const Contact: React.FC = () => {
 
           <div
             className="contact-form-card fade-in"
-            style={{ transitionDelay: "0.1s" }}
+            style={{ "--delay": "0.1s" } as React.CSSProperties}
             ref={formRef}
           >
             <div className="form-title">Send a message</div>
@@ -217,16 +257,7 @@ const Contact: React.FC = () => {
               {/* Honeypot field — hidden from real visitors via CSS, but most
                   bots fill in every field they find in the DOM. Anything
                   other than a sighted human leaving this blank gets caught. */}
-              <div
-                style={{
-                  position: "absolute",
-                  width: 0,
-                  height: 0,
-                  overflow: "hidden",
-                  opacity: 0,
-                }}
-                aria-hidden="true"
-              >
+              <div className="visually-hidden" aria-hidden="true">
                 <label htmlFor="company">Company</label>
                 <input
                   id="company"
@@ -241,8 +272,7 @@ const Contact: React.FC = () => {
 
               <button
                 type="submit"
-                className="btn-grad"
-                style={{ width: "100%", justifyContent: "center", marginTop: 4 }}
+                className="btn-grad btn-grad-block"
                 disabled={status === "submitting"}
               >
                 <svg

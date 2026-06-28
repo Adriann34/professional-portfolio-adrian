@@ -57,38 +57,25 @@ const SkillCardItem: React.FC<{
   delay: string;
 }> = ({ card, delay }) => {
   const ref = useFadeIn<HTMLDivElement>();
+  const cssVars = {
+    "--delay": delay,
+    "--icon-bg": card.iconBg,
+    "--accent": card.iconColor,
+    "--accent-30": `${card.iconColor}4d`,
+  } as React.CSSProperties;
+
   return (
-    <div className="skill-card fade-in" style={{ transitionDelay: delay }} ref={ref}>
-      <div className="skill-icon-wrap" style={{ background: card.iconBg }}>
-        {ICONS[card.name]}
-      </div>
+    <div className="skill-card fade-in" style={cssVars} ref={ref}>
+      <div className="skill-icon-wrap">{ICONS[card.name]}</div>
       <div className="skill-category">{card.category}</div>
       <div className="skill-name">{card.name}</div>
       <div className="skill-tags">
         {card.tags.map((tag) => (
-          <span
-            key={tag.label}
-            className="skill-tag"
-            style={{ borderColor: `${card.iconColor}4d`, color: card.iconColor }}
-          >
+          <span key={tag.label} className="skill-tag">
             {tag.label}
           </span>
         ))}
       </div>
-      {card.proficiency !== undefined && (
-        <div className="progress-wrap" style={{ marginTop: "auto", paddingTop: 20 }}>
-          <div className="progress-label">
-            <span>Proficiency</span>
-            <span>{card.proficiency}%</span>
-          </div>
-          <div className="progress-bar">
-            <div
-              className="progress-fill"
-              style={{ width: `${card.proficiency}%` }}
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 };
