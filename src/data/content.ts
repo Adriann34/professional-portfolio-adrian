@@ -62,6 +62,7 @@ export const skillCards: SkillCard[] = [
     tags: [
       { label: "PHP" },
       { label: "Cloudflare Workers" },
+      { label: "Node.js" },
     ],
   },
   {

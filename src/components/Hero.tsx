@@ -12,6 +12,7 @@ const STACK_CHIPS: { label: string; accent: ChipAccent }[] = [
   { label: "Tailwind", accent: "accent2" },
   { label: "PHP", accent: "accent2" },
   { label: "Firebase", accent: "accent3" },
+  { label: "Node.js", accent: "accent3" },
 ];
 
 const Hero: React.FC = () => {
